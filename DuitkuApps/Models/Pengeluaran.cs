@@ -22,7 +22,7 @@ namespace DuitkuApps.Models
         [Display(Name = "Kode Komponen")]
         public int Id_komponen { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:dd-MMMM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MMM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Tanggal { get; set; }
 
         [Required]

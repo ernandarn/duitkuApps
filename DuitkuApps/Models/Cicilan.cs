@@ -21,11 +21,11 @@ namespace DuitkuApps.Models
 
         [Column(TypeName = "date")]
         [Display(Name = "Tanggal Mulai")]
-        [DisplayFormat(DataFormatString = "{0:dd-MMMM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MMM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Tgl_mulai { get; set; }
 
         [Column(TypeName = "date")]
-        [DisplayFormat(DataFormatString = "{0:dd-MMMM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MMM/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Tanggal Jatuh Tempo")]
         public DateTime Tgl_bayar { get; set; }
 

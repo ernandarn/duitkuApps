@@ -575,7 +575,6 @@
     <Content Include="Views\PengeluaranAll\Create.cshtml" />
     <Content Include="Views\PengeluaranAll\Edit.cshtml" />
     <Content Include="Views\PengeluaranAll\TampilPengeluaran.cshtml" />
-    <Content Include="Views\PengeluaranAll\CreatePengeluaran.cshtml" />
     <Content Include="Views\PengeluaranAll\EditPengeluaran.cshtml" />
     <Content Include="Views\PengeluaranAll\TambahDetail.cshtml" />
     <Content Include="Views\PengeluaranAll\tampilKomp.cshtml" />

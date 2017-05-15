@@ -10,6 +10,27 @@
         color: white;
     }
 </style>
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/cssjqryUi")
+
+    <script type="text/javascript">
+
+     $(document).ready(function () {
+         $('input[type=datetime]').datepicker({
+             dateFormat: "dd/MM/yy",
+             changeMonth: true,
+             changeYear: true,
+             yearRange: "-0:+20"
+         });
+
+     });
+    </script>
+
+}
 <h2 style="text-align:center;font-weight:bold;font-family:'Harlow Solid';font-size:45px;color:red"><strong>@ViewBag.Title</strong> </h2>
 <hr />
 <br />

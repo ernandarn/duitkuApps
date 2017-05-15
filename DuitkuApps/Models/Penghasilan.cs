@@ -25,7 +25,7 @@ namespace DuitkuApps.Models
 
         [Required]
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MMM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Tanggal { get; set; }
 
         [Required]

@@ -8,11 +8,6 @@
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
-    @*<script src="http://code.highcharts.com/highcharts.js"></script>
-    <script src="http://code.highcharts.com/modules/exporting.js"></script>  
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>   
-    <script src="latestJs_1.11/jquery.min.js"></script>
-    <script src="Highcharts/highcharts.js"></script>*@
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     @Styles.Render("~/Content/css")
@@ -113,14 +108,16 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 
-    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
+
+
+    @*<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>*@
 
     @*<link href="~/Content/jquery-ui.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>*@
   
 
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    @*<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('input[type=datetime]').datepicker({
@@ -130,9 +127,9 @@
                 yearRange: '-0:+20'
             });
         });
-    </script>
+    </script>*@
 
-    <script type="text/javascript">
+    @*<script type="text/javascript">
   $(document).ready(function () {
     $(".DatePicker").datepicker({
       dateFormat: 'dd M yy',
@@ -140,6 +137,6 @@
       changeYear: true,
      });
   });
-    </script>
+    </script>*@
 </body>
 </html>

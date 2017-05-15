@@ -19,6 +19,26 @@
     }
 </style>
 
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/cssjqryUi")
+
+    <script type="text/javascript">
+
+     $(document).ready(function () {
+         $('input[type=datetime]').datepicker({
+             dateFormat: "dd/MM/yy",
+             changeMonth: true,
+             changeYear: true,
+             yearRange: "-0:+20"
+         });
+
+     });
+    </script>
+
+}
+
 <h2 ><strong>Penghasilan</strong> </h2>
 <hr />
 <br />
@@ -42,7 +62,7 @@
     </div>
 
 }*@
-<br /><br />
+<br />
 @Html.ActionLink("Tambah Penghasilan", "Create", "Penghasilan", new { @class = "btn btn-success" })
 <br /><br /><br />
 
@@ -84,11 +104,11 @@
                 @Html.DisplayFor(modelItem => item.Keterangan)
             </td>
             <td style="text-align:center">
-                @if (item.Tanggal == DateTime.Now)
-                {
+                @*@if (item.Tanggal == DateTime.Now)*@
+                @*{*@
                 @Html.ActionLink("Ubah", "Edit", new { id = item.Id_penghasilan }, new { @class = "btn btn-warning" }) 
                 @Html.ActionLink("Hapus", "Delete", new { id = item.Id_penghasilan }, new { @class = "btn btn-danger" })
-                }             
+                @*}*@             
             </td>
         </tr>
     }
