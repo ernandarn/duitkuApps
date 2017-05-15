@@ -1,0 +1,17 @@
+﻿@model IEnumerable<DuitkuApps.Models.Pengguna>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@if (ViewBag.displayMenu == "Yes")
+{
+    @*<h2>Validasi Email</h2>
+    <h3 style="color:blue">Silahkan menunggu, konfirmasi email akan segera dikirim :)</h3>*@
+    <h2>Selamat Datang <strong>@ViewBag.Name</strong> :)</h2>
+}
+else
+{
+    <h2>Silahkan Masuk Dahulu</h2>
+    <li>@Html.ActionLink("Masuk", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+}

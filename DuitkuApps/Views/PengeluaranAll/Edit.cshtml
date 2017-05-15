@@ -1,0 +1,60 @@
+﻿@model DuitkuApps.Models.Komp_Pengeluaran
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Ubah Komponen Pengeluaran";
+}
+
+<h2 style="text-align:center;font-weight:bold;font-family:'Harlow Solid';font-size:45px;color:red"><strong>@ViewBag.Title</strong> </h2>
+<hr />
+<br />
+
+<div class="container" style="margin-left:200px">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id_komponen)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", @Value = User.Identity.GetUserName() } })
+                    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Nama_komponen, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Nama_komponen, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Nama_komponen, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Batas_max, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Batas_max, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Batas_max, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Simpan" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+<div>
+    @Html.ActionLink("Kembali ke Halaman Pengeluaran", "Index")
+</div>
+
+
+   
+
+  

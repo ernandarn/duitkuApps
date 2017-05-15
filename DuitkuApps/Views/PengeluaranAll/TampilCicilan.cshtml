@@ -1,0 +1,78 @@
+﻿@model IEnumerable<DuitkuApps.Models.Cicilan>
+
+@{
+    ViewBag.Title = "Detail Cicilan";
+}
+
+<style>
+    th {
+        text-align: center;
+        background-color: red;
+        color: white;
+    }
+</style>
+<h2 style="text-align:center;font-weight:bold;font-family:'Harlow Solid';font-size:45px;color:red"><strong>@ViewBag.Title</strong> </h2>
+<hr />
+<br />
+
+@Html.Raw(ViewBag.Pesan)
+
+
+@Html.ActionLink("Tambah Detail Cicilan", "TambahCicilan", "PengeluaranAll", new { @class = "btn btn-success" })
+<br /><br />
+<div class="container">
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nama_cicilan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tgl_mulai)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tgl_bayar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Jmlh_bayar)
+            </th>
+            <th></th>
+        </tr>
+        @{ decimal grandtotal = 0;}
+        @foreach (var item in Model)
+        {
+            var price = string.Format("{0:N0}", item.Jmlh_bayar);
+            grandtotal += item.Jmlh_bayar;
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nama_cicilan)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tgl_mulai)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tgl_bayar)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Jmlh_bayar)
+                </td>
+                <td>
+                    @Html.ActionLink("Ubah", "EditCicilan", new { id = item.Id_cicilan }, new { @class = "btn btn-warning" }) |
+                    @Html.ActionLink("Hapus", "DeleteCicilan", new { id = item.Id_cicilan }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+<div class="container">
+    <p style="margin-left:550px;font-size:20px">
+        <strong>Total  : Rp.@string.Format("{0:N0}", grandtotal)</strong>
+    </p>
+</div>
+
+
+<div>
+    @Html.ActionLink("Kembali ke Halaman Komponen Pengeluaran", "Index")
+</div>

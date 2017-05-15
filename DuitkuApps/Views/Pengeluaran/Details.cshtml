@@ -1,0 +1,90 @@
+﻿@model DuitkuApps.ViewModels.PengeluaranVM
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2 style="text-align:center;font-weight:bold;font-family:'Harlow Solid';font-size:45px;color:red"><strong>Detail E</strong> </h2>
+
+<br /><br /><br />
+<style>
+    th {
+        text-align: center;
+        background-color: red;
+        color: white;
+    }
+</style>
+
+<div>
+    <dl class="dl-horizontal">
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Bulan)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Bulan)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tahun)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tahun)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nama_komponen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nama_komponen)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Batas_max)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Batas_max)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nama_pengeluaran)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nama_pengeluaran)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Jumlah)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Jumlah)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Keterangan)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Keterangan)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Ubah", "Edit", new { id = Model.Id_pengeluaran }, new { @class = "btn btn-warning" }) |
+    @Html.ActionLink("Hapus", "Hapus", new { id = Model.Id_pengeluaran }, new { @class = "btn btn-danger" })
+ 
+    @Html.ActionLink("Kembali ke Halaman Pengeluaran", "Index")
+</p>

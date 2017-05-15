@@ -1,0 +1,86 @@
+﻿@model IEnumerable<DuitkuApps.ViewModels.PengeluaranVM>
+
+@{
+    ViewBag.Title = "Index";
+}
+<h2 style="text-align:center;font-weight:bold;font-family:'Harlow Solid';font-size:45px;color:red"><strong>Pengeluaran</strong> </h2>
+
+<br /><br /><br />
+
+@Html.ActionLink("Tambah Pengeluaran", "Create", "Pengeluaran", new { @class = "btn btn-success" })
+<br /><br /><br />
+
+<style>
+    th {
+        text-align: center;
+        background-color: red;
+        color: white;
+    }
+</style>
+
+<table class="table table-bordered">
+    <tr>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Bulan)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tahun)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Nama_komponen)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Batas_max)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nama_pengeluaran)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Jumlah)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Keterangan)
+        </th>
+      
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nama_komponen)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Batas_max)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bulan)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tahun)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Nama_pengeluaran)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Jumlah)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Keterangan)
+        </td>
+       
+        <td>
+            @Html.ActionLink("Ubah", "Edit", new { id = item.Id_komponen }, new { @class = "btn btn-warning" }) |
+            @*@Html.ActionLink("Details", "Details", new { id = item.Id_pengeluaran }, new { @class = "btn btn-default" }) |*@
+            @Html.ActionLink("Hapus", "Hapus", new { id = item.Id_komponen }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>

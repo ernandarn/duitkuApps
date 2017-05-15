@@ -1,0 +1,68 @@
+﻿@model IEnumerable<DuitkuApps.Models.Realisasi>
+
+@{
+    ViewBag.Title = "Realisasi Pengeluaran";
+}
+
+<style>
+    th {
+        text-align: center;
+        background-color: red;
+        color: white;
+    }
+</style>
+<h2 style="text-align:center;font-weight:bold;font-family:'Harlow Solid';font-size:45px;color:red"><strong>@ViewBag.Title</strong> </h2>
+<hr />
+<br />
+
+@Html.Raw(ViewBag.Pesan)
+
+
+@Html.ActionLink("Tambah Realisasi", "TambahRealisasi", "Realisasi", new { @class = "btn btn-success" })
+<br /><br />
+
+<div class="container">
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id_komponen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tanggal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nama_realisasi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Jumlah)
+            </th>
+            <th></th>
+        </tr>
+        @{ decimal grandtotal = 0;}
+        @foreach (var item in Model)
+        {
+            var price = string.Format("{0:N0}", item.Jumlah);
+            grandtotal += item.Jumlah;
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id_komponen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tanggal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nama_realisasi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Jumlah)
+                </td>
+                <td>
+                    @Html.ActionLink("Ubah", "EditRealisasi", new { id = item.Id_realisasi }, new { @class = "btn btn-warning" }) |
+                    @Html.ActionLink("Hapus", "DeleteRealisasi", new { id = item.Id_realisasi }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+</div>

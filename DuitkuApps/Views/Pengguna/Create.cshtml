@@ -1,0 +1,131 @@
+﻿@model DuitkuApps.Models.Pengguna
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Tambah Biodata Pengguna";
+}
+<style>
+    #form-group{
+        font-family : 'Times New Roman', Times, serif;
+        font-size : 10px;
+    }
+    h2{
+        text-align:center;
+        font-weight:bold;
+        font-family:'Harlow Solid';
+        font-size:45px;
+        color:red
+    }
+    #form-horizontal{
+       
+    }
+</style>
+
+<br />
+<h2><strong>@ViewBag.Title</strong> </h2>
+@*<br /><br /><br />*@
+<hr />
+<br />
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+   
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="col-md-12" style="margin-left:100px;">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserName)
+                    @*<div class="col-md-10">*@
+                    @*@Html.DisplayFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @Value = User.Identity.GetUserName() } })
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    @*</div>*@
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NamaPengguna)
+                    @*<div class="col-md-10">*@
+                        @Html.EditorFor(model => model.NamaPengguna, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.NamaPengguna, "", new { @class = "text-danger" })
+                    @*</div>*@
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Alamat)
+                    @*<div class="col-md-10">*@
+                        @*@Html.TextAreaFor(model => model.Alamat,  new { @class = "form-control" },  rows = 4 })*@
+                    @Html.TextAreaFor(model => model.Alamat, new { @class = "form-control", rows = 5 })
+                        @Html.ValidationMessageFor(model => model.Alamat, "", new { @class = "text-danger" })
+                    @*</div>*@
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Sumber Penghasilan</label>
+                     @Html.DropDownListFor(model => model.IdSumber, ViewBag.Master_SumberPenghasilan as IEnumerable<SelectListItem>, "",
+                    new { htmlAttributes = new { @class = "form-control" } }) 
+                    @Html.ValidationMessageFor(model => model.IdSumber, "", new { @class = "text-danger" })
+                        @*<div class="col-md-10">
+                @Html.DropDownListFor(m => m.SumberPenghasilan, Model.sumberpenghasilan, "", new { @class = "form-control" })
+            </div>*@
+                    </div>
+
+              
+            </div>
+            
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NoHp)
+                    @*<div class="col-md-10">*@
+                    @Html.EditorFor(model => model.NoHp, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NoHp, "", new { @class = "text-danger" })
+                    @*</div>*@
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NoNPWP)
+                    @*<div class="col-md-10">*@
+                        @Html.EditorFor(model => model.NoNPWP, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.NoNPWP, "", new { @class = "text-danger" })
+                    @*</div>*@
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NoKTP)
+                    @*<div class="col-md-10">*@
+                        @Html.EditorFor(model => model.NoKTP, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.NoKTP, "", new { @class = "text-danger" })
+                    @*</div>*@
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Status</label>
+                    @Html.DropDownListFor(model => model.IdStatus, ViewBag.Master_Status as IEnumerable<SelectListItem>, "",
+                    new { htmlAttributes = new { @class = "form-control" } }) @Html.ValidationMessageFor(model => model.IdStatus, "", new { @class = "text-danger" })
+                    @*@Html.LabelFor(m => m.Status)
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.Status, Model.status_, "", new { @class = "form-control" })
+                    </div>*@
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.JmlTanggungan)
+                    @*<div class="col-md-10">*@
+                        @Html.EditorFor(model => model.JmlTanggungan, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.JmlTanggungan, "", new { @class = "text-danger" })
+                    @*</div>*@
+                </div>
+            </div>
+        </div>
+
+        <br /><br /><br /><br /><br /><br />
+      
+        <div class="form-group">
+            <div class="col-md-offset-5 col-md-10">
+                <input type="submit" value="Tambah" class="btn btn-success"  />
+            </div>
+        </div>
+    </div>
+}
+
+@*<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>*@

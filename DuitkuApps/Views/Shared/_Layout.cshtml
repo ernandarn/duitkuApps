@@ -3,9 +3,57 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link rel="icon" type="image/png" href="~/Content/image/ayam.png" />
+    <title>Duitku</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    @*<script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>  
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>   
+    <script src="latestJs_1.11/jquery.min.js"></script>
+    <script src="Highcharts/highcharts.js"></script>*@
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/highchart")
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+
+    <style>
+        input[type=text] {
+            color: #555555;
+            margin-top: 8px;
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+            transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+            /*width:100px;*/
+        }
+
+            input[type=text]:focus {
+                width: 50%;
+            }
+    </style>
+   
+
+    <script type='text/javascript'>
+        var appInsights=window.appInsights||function(config)
+        {
+            function r(config){ t[config] = function(){ var i = arguments; t.queue.push(function(){ t[config].apply(t, i)})} }
+            var t = { config:config},u=document,e=window,o='script',s=u.createElement(o),i,f;for(s.src=config.url||'//az416426.vo.msecnd.net/scripts/a/ai.0.js',u.getElementsByTagName(o)[0].parentNode.appendChild(s),t.cookie=u.cookie,t.queue=[],i=['Event','Exception','Metric','PageView','Trace','Ajax'];i.length;)r('track'+i.pop());return r('setAuthenticatedUserContext'),r('clearAuthenticatedUserContext'),config.disableExceptionTracking||(i='onerror',r('_'+i),f=e[i],e[i]=function(config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t['_' + i](config, r, u, e, o),s}),t
+        }({
+            instrumentationKey:'0e11c8ed-2df0-44a3-82bd-091819370ed6'
+        });
+
+        window.appInsights=appInsights;
+        appInsights.trackPageView();
+    </script>
 
 </head>
 <body>
@@ -17,13 +65,36 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("duitku", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @style = "color:white;font-family:Harlow Solid;font-size:33px" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Beranda", "Index", "Home", null, new { style = "color:white" })</li>
+                    <li>@Html.ActionLink("Tentang Kami", "About", "Home", null, new { style = "color:white" })</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Penganggaran</a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Penghasilan", "Index", "Penghasilan")</li>
+                            <li>@Html.ActionLink("Pengeluaran", "Index", "PengeluaranAll")</li>
+                            <li>@Html.ActionLink("Realisasi Pengeluaran", "TampilRealisasi", "Realisasi")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laporan Grafik</a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Laporan Penghasilan", "tampilLaporan", "Laporan")</li>
+                            <li>@Html.ActionLink("Laporan Per Komponen Pengeluaran ", "Index", "Pengeluaran")</li>
+                            <li>@Html.ActionLink("Laporan Komponen Pengeluaran", "Index", "Cicilan")</li>
+                        </ul>
+                    </li>
+                 
+                    @*<li>@Html.ActionLink("Laporan Grafik", "Index", "Barang", null, new { style = "color:white" })</li>*@
+                    @*<li>
+                        @using (Html.BeginForm("Search", "Barang", FormMethod.Post, new { @class = "form-inline" }))
+                        {
+                            <input type="text" name="txtSearch" placeholder="Pencarian" class="form-control" />
+                        }
+                    </li>*@
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -33,12 +104,42 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Duitku</p>
         </footer>
     </div>
 
+    
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script src="~/Scripts/jquery-1.12.4.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    @*<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>*@
+  
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input[type=datetime]').datepicker({
+                dateformat: 'dd/MM/yyyy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '-0:+20'
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+  $(document).ready(function () {
+    $(".DatePicker").datepicker({
+      dateFormat: 'dd M yy',
+      changeMonth: true,
+      changeYear: true,
+     });
+  });
+    </script>
 </body>
 </html>

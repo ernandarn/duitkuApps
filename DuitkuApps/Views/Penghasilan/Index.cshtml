@@ -1,0 +1,103 @@
+﻿@model IEnumerable<DuitkuApps.Models.Penghasilan>
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    th {
+        text-align: center;
+        background-color: red;
+        color: white;
+    }
+
+    h2 {
+        text-align: center;
+        font-weight: bold;
+        font-family: 'Harlow Solid';
+        font-size: 45px;
+        color: red;
+    }
+</style>
+
+<h2 ><strong>Penghasilan</strong> </h2>
+<hr />
+<br />
+@Html.Raw(ViewBag.Pesan)
+
+
+@*@Html.DropDownList("ExpiryYear", Enumerable.Range(DateTime.Now.Year, 10).Select(x => new SelectListItem { Text = x.ToString() }), "Expiry Year")
+@Html.DropDownList("ExpiryMonth", Enumerable.Range(1, 12).Select(x => new SelectListItem { Text = x.ToString() }), "Expiry Month")
+<input type="submit" value="Cari" class="btn btn-primary btn-sm" />*@
+
+@*@{
+    var dari = (DateTime)ViewBag.dari;
+    var ke = (DateTime)ViewBag.ke;
+}
+@using (Html.BeginForm("Cari", "Penghasilan", FormMethod.Get))
+{
+    <div>
+        <div>Dari Tanggal: @Html.TextBox("", string.Format("{0:dd MMM yyy}", dari), new { @class = "DatePicker" })</div>
+        <div>Ke Tanggal: @Html.TextBox("", string.Format("{0:dd MMM yyy}", ke), new { @class = "DatePicker" })</div>
+        <input type="submit" value="Cari" />
+    </div>
+
+}*@
+<br /><br />
+@Html.ActionLink("Tambah Penghasilan", "Create", "Penghasilan", new { @class = "btn btn-success" })
+<br /><br /><br />
+
+
+
+<table class="table table-bordered">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Tanggal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nama_penghasilan)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Jumlah)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Keterangan)
+        </th>
+        <th></th>
+    </tr>
+
+@{ decimal grandtotal = 0;}
+@foreach (var item in Model)
+{
+    var price = string.Format("{0:N0}", item.Jumlah);
+    grandtotal += item.Jumlah;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tanggal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nama_penghasilan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Jumlah)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Keterangan)
+            </td>
+            <td style="text-align:center">
+                @if (item.Tanggal == DateTime.Now)
+                {
+                @Html.ActionLink("Ubah", "Edit", new { id = item.Id_penghasilan }, new { @class = "btn btn-warning" }) 
+                @Html.ActionLink("Hapus", "Delete", new { id = item.Id_penghasilan }, new { @class = "btn btn-danger" })
+                }             
+            </td>
+        </tr>
+    }
+
+</table>
+
+<div class="container">
+    <p style="margin-left:350px;font-size:20px">
+        <strong>Total  : Rp.@string.Format("{0:N0}", grandtotal)</strong>
+    </p>
+</div>
+

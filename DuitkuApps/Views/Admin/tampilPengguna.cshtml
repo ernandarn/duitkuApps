@@ -1,0 +1,60 @@
+﻿@model IEnumerable<DuitkuApps.Models.AspNetUsers>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2 style="text-align:center;font-weight:bold;font-family:'Harlow Solid';font-size:45px;color:red"><strong>Daftar Pengguna</strong> </h2>
+<br /><br /><br />
+<style>
+    th {
+        text-align: center;
+        background-color: red;
+        color: white;
+    }
+</style>
+
+
+
+<table class="table table-bordered">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td style="text-align:center">
+                @*@if (User.IsInRole("Pengguna"))
+                    {
+                    @Html.ActionLink("Verifikasi", "Edit", new { id = item.UserName }, new { @class = "btn btn-warning" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Lihat Berita", "Edit", new { id = item.UserName }, new { @class = "btn btn-success" })
+                    }*@
+                @*@if (User.IsInRole("Admin"))
+                        {
+                        @Html.ActionLink("Lihat Berita", "Edit", new { id = item.UserName }, new { @class = "btn btn-success" })
+                    }
+                    else
+                    {*@
+                @Html.ActionLink("Verifikasi", "ConfirmEmail", "Account", new { id = item.UserName, Email = item.Email }, new { @class = "btn btn-warning" })
+                @*}*@
+            </td>
+        </tr>
+    }
+
+</table>

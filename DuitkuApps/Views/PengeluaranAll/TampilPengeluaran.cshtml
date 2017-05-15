@@ -1,0 +1,91 @@
+﻿@model IEnumerable<DuitkuApps.Models.Pengeluaran>
+
+@{
+    ViewBag.Title = "Detail Pengeluaran";
+}
+<style>
+    th {
+        text-align: center;
+        background-color: red;
+        color: white;
+    }
+</style>
+<h2 style="text-align:center;font-weight:bold;font-family:'Harlow Solid';font-size:45px;color:red"><strong>@ViewBag.Title</strong> </h2>
+<hr />
+<br />
+
+@Html.Raw(ViewBag.Pesan)
+
+
+@Html.ActionLink("Tambah Detail Pengeluaran", "TambahDetail", "PengeluaranAll", new { @class = "btn btn-success" })
+<br /><br />
+<div class="container">
+    @*<h3><strong>Id Komponen : @id</strong></h3>*@
+    @*<h4><strong>Nama Komponen : @nama</strong></h4>*@
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id_komponen)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Nama_komponen)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Tanggal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nama_pengeluaran)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Jumlah)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Keterangan)
+            </th>
+            <th></th>
+        </tr>
+        @{ decimal grandtotal = 0;}
+        @foreach (var item in Model)
+        {
+            var price = string.Format("{0:N0}", item.Jumlah);
+            grandtotal += item.Jumlah;
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id_komponen)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Nama_komponen)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tanggal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nama_pengeluaran)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Jumlah)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Keterangan)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditPengeluaran", new { id = item.Id_pengeluaran }, new { @class = "btn btn-warning" }) |
+                    @Html.ActionLink("Delete", "DeletePengeluaran", new { id = item.Id_pengeluaran }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+<div class="container">
+    <p style="margin-left:400px;font-size:20px">
+        <strong>Total  : Rp.@string.Format("{0:N0}", grandtotal)</strong>
+    </p>
+</div>
+
+
+<div>
+    @Html.ActionLink("Kembali ke Halaman Komponen Pengeluaran", "Index")
+</div>

@@ -3,6 +3,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Net;
+using Microsoft.Owin.Security;
+using System;
+using System.Web.Mvc;
 
 namespace DuitkuApps.Models
 {
@@ -16,7 +20,20 @@ namespace DuitkuApps.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        //private async Task<ActionResult> SignInAsync(ApplicationUser user, bool isPersistent)
+        //{
+        //    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+        //    AuthenticationManager.SignIn(new AuthenticationProperties()
+        //    {
+        //        IsPersistent = isPersistent
+        //    },
+        //       await user.GenerateUserIdentityAsync(UserManager));
+        //}
+
+
     }
+
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -29,5 +46,7 @@ namespace DuitkuApps.Models
         {
             return new ApplicationDbContext();
         }
+
+
     }
 }

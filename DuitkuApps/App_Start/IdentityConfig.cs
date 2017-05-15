@@ -11,6 +11,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using DuitkuApps.Models;
+using SendGrid.Helpers.Mail;
+using System.Net;
+using System.Configuration;
+using System.Net.Mail;
+using System.Net.Mime;
 
 namespace DuitkuApps
 {
@@ -19,7 +24,32 @@ namespace DuitkuApps
         public Task SendAsync(IdentityMessage message)
         {
             // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            //return Task.FromResult(0);
+            return Task.Factory.StartNew(() =>
+            {
+                SendMail(message);
+            });
+        }
+
+       void SendMail(IdentityMessage message)
+        {
+            string text = string.Format("{0}:{1}", message.Subject, message.Body);
+            string html = "Silahkan klik link berikut untuk konfirmasi email <a href=\"" + message.Body + "\">link</a><br/>";
+
+            html += HttpUtility.HtmlEncode(@"Atau klik browser berikut:" + message.Body);
+
+            MailMessage mm = new MailMessage();
+            mm.From = new MailAddress(ConfigurationManager.AppSettings["Email"].ToString());
+            mm.To.Add(new MailAddress(message.Destination));
+            mm.Subject = "Konfirmasi Email";
+            mm.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(text, null, MediaTypeNames.Text.Plain));
+            mm.AlternateViews.Add(AlternateView.CreateAlternateViewFromString(text, null, MediaTypeNames.Text.Html));
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", Convert.ToInt32(587));
+            System.Net.NetworkCredential credentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings["Email"].ToString(), ConfigurationManager.AppSettings["Password"].ToString());
+            smtp.Credentials = credentials;
+            smtp.EnableSsl = true;
+            //mm.UseDefaultCredentials = false;
+            smtp.Send(mm);
         }
     }
 
@@ -40,7 +70,7 @@ namespace DuitkuApps
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
             // Configure validation logic for usernames
@@ -53,11 +83,11 @@ namespace DuitkuApps
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
+                RequiredLength = 8,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
             };
 
             // Configure user lockout defaults

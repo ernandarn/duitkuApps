@@ -9,6 +9,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using DuitkuApps.Models;
+using System.Collections.Generic;
+using System.Net.Mail;
+using System.Net;
 
 namespace DuitkuApps.Controllers
 {
@@ -17,9 +20,11 @@ namespace DuitkuApps.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        ApplicationDbContext context;
 
         public AccountController()
         {
+            context = new ApplicationDbContext();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -69,17 +74,38 @@ namespace DuitkuApps.Controllers
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
+            //{
+            //    return View(model);
+            //}
             {
-                return View(model);
+                var user = await UserManager.FindAsync(model.UserName, model.Password);
+                if (user != null)
+                {
+                    if (user.EmailConfirmed == true)
+                    {
+                        //await SignInAsync(user, model.RememberMe); 
+                        await SignInManager.SignInAsync(user, model.RememberMe, rememberBrowser: false);
+                        return RedirectToLocal(returnUrl);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Konfirmasi email");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Username atau Password Salah");
+                }
             }
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    //  return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Admin");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -89,6 +115,7 @@ namespace DuitkuApps.Controllers
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
+
         }
 
         //
@@ -136,13 +163,39 @@ namespace DuitkuApps.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+       [AllowAnonymous]
         public ActionResult Register()
         {
+            ViewBag.Name = new SelectList(context.Roles.Where(u => !u.Name.Contains("Admin"))
+                                            .ToList(), "Name", "Name");
             return View();
         }
 
-        //
+        // GET: /Account/ConfirmEmail
+        //[AllowAnonymous]
+        //public async Task<ActionResult> ConfirmEmail(string Token, string Email)
+        //{
+        //    ApplicationUser user = this.UserManager.FindById(Token);
+        //    if (user != null)
+        //    {
+        //        if (user.Email == Email)
+        //        {
+        //            user.EmailConfirmed = true;
+        //            await UserManager.UpdateAsync(user);
+        //            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        //            return RedirectToAction("Index", "Admin", new { ConfirmedEmail = user.Email });
+        //        }
+        //        else
+        //        {
+        //            return RedirectToAction("Confirm", "Account", new { Email = user.Email });
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Confirm", "Account", new { Email = "" });
+        //    }
+        //}
+
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
@@ -151,20 +204,20 @@ namespace DuitkuApps.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    return RedirectToAction("Index", "Home");
+                    await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Konfirmasi Email", "Silahkan Klik Link Berikut Untuk Melanjutkan Pendaftaran Akun <a href=\"" + callbackUrl + "\">here</a>");
+                    //ViewBag.Link = callbackUrl;
+                    return RedirectToAction("Confirm", "Account");         
                 }
+                ViewBag.Name = new SelectList(context.Roles.Where(u => !u.Name.Contains("Admin"))
+                                      .ToList(), "Name", "Name");
                 AddErrors(result);
             }
 
@@ -172,7 +225,78 @@ namespace DuitkuApps.Controllers
             return View(model);
         }
 
-        //
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public async Task<ActionResult> Verify(RegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+        //        user.EmailConfirmed = false;
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        //            System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage(
+        //new System.Net.Mail.MailAddress("sender@mydomain.com", "Web Registration"),
+        //new System.Net.Mail.MailAddress(user.Email));
+        //            m.Subject = "Konfirmasi Email";
+        //            m.Body = "Hello " + user.UserName + "Terimakasih sudah mendaftar di duitKu Apps !";
+        //            m.Body = string.Format("< BR /> Silahkan klik berikut untuk menyelesaikan pendaftaran : < a href =\"{1}\" title =\"Konfirmasi Email\">{1}</a>",
+        //         user.UserName, Url.Action("ConfirmEmail", "Account",
+        //         new { Token = user.Id, Email = user.Email }, Request.Url.Scheme));
+        //            m.Body += "<tr>";
+        //            m.Body += "<td>Terimakasih</td><td>Tim duitKu Apps</td>";
+        //            m.Body += "</tr>";
+        //            m.IsBodyHtml = true;
+        //            System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.mydomain.com");
+        //            smtp.Credentials = new System.Net.NetworkCredential("sender@mydomain.com", "password");
+        //            smtp.EnableSsl = true;
+        //            smtp.Send(m);
+        //            return RedirectToAction("Confirm", "Account", new { Email = user.Email });
+        //        }
+        //        else
+        //        {
+        //            AddErrors(result);
+        //        }
+        //    }
+        //    return View(model);
+        //}
+
+        //private void SendActivationEmail(AspNetUsers user)
+        //{
+        //    using (MailMessage mm = new MailMessage("sender@gmail.com", user.Email))
+        //    {
+        //        mm.Subject = "Konfirmasi Email";
+        //        string body = "Hello " + user.UserName + "Terimakasih sudah mendaftar di duitKu Apps !" + " , ";
+        //        body += "<br /><br />Silahkan klik link berikut untuk menyelesaikan pendaftaran :";
+        //        body += string.Format("< BR /> Silahkan klik link berikut untuk menyelesaikan pendaftaran : < a href =\"{1}\" title =\"Konfirmasi Email\">{1}</a>",
+        //         user.UserName, Url.Action("ConfirmEmail", "Account",
+        //         new { Token = user.Id, Email = user.Email }, Request.Url.Scheme));
+        //        body += "<br /><br />Terimakasih";
+        //        mm.Body = body;
+        //        mm.IsBodyHtml = true;
+        //        SmtpClient smtp = new SmtpClient();
+        //        smtp.Host = "smtp.gmail.com";
+        //        smtp.EnableSsl = true;
+        //        NetworkCredential NetworkCred = new NetworkCredential("sender@gmail.com", "<password>");
+        //        smtp.UseDefaultCredentials = true;
+        //        smtp.Credentials = NetworkCred;
+        //        smtp.Port = 587;
+        //        smtp.Send(mm);
+        //    }
+        //}
+
+
+        [AllowAnonymous]
+        public ActionResult Confirm(string Email)
+        {
+            ViewBag.Email = Email;
+            return View();
+        }
+
+
+
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
@@ -184,6 +308,24 @@ namespace DuitkuApps.Controllers
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
+        //public ActionResult ConfirmEmail(string userid, string token)
+        //{
+        //    AspNetUsers user = user.FindByIdAsync(userid).Result;
+        //    IdentityResult result = userManager.
+        //                ConfirmEmailAsync(user, token).Result;
+        //    if (result.Succeeded)
+        //    {
+        //        ViewBag.Message = "Email confirmed successfully!";
+        //        return View("Success");
+        //    }
+        //    else
+        //    {
+        //        ViewBag.Message = "Error while confirming your email!";
+        //        return View("Error");
+        //    }
+        //}
+
+
 
         //
         // GET: /Account/ForgotPassword
