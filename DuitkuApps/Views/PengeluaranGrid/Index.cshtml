@@ -1,0 +1,124 @@
+﻿@model IEnumerable<DuitkuApps.ViewModels.PengeluaranGrid>
+@{
+    ViewBag.Title = "Nested webgrid implementation";
+    WebGrid grid = new WebGrid(source: Model, canSort: false);
+}
+
+<style>
+    /*Here I will write some css for looks good*/
+
+    th, td {
+        padding: 5px;
+    }
+
+    th {
+        background-color: lightgreen;
+    }
+
+    #MainGrid, #MainGrid tr {
+        border: 1px solid #0D857B;
+    }
+
+    #SubGrid, #SubGrid tr {
+        border: 1px solid green;
+    }
+
+    #SubGrid {
+        margin: 0px 0px 0px 10px;
+        padding: 5px;
+        width: 95%;
+    }
+
+        #SubGrid th {
+            font-size: 12px;
+        }
+
+    .hoverEff {
+        cursor: pointer;
+    }
+
+        .hoverEff:hover {
+            background-color: rgb(248, 242, 242);
+        }
+
+    .expand {
+        background-image: url(/Images/plus.png);
+        background-position-x: -22px;
+        background-repeat: no-repeat;
+    }
+
+    .collapse {
+        background-image: url(/Images/plus.png);
+        background-position-x: -2px;
+        background-repeat: no-repeat;
+    }
+</style>
+
+<div id="main" style="padding:25px; background-color:white;">
+    <h2>Nested webgrid in ASP.NET MVC5 application</h2>
+    @grid.GetHtml(
+            htmlAttributes: new { id = "MainGrid", width = "700px" },
+    tableStyle: "table table-bordered table-responsive",
+    //for main grid display
+    columns: grid.Columns(
+            grid.Column("komp.Id_komponen", "Id Komponen"),
+            grid.Column("komp.Nama_komponen", "Nama Komponen"),
+            grid.Column("komp.Batas_max", "Batas Maximal"),
+
+            //nested grid code starts here
+            grid.Column(format: (item) =>
+            {
+                WebGrid subGrid = new WebGrid(source: item.detailPengeluaran);
+                return subGrid.GetHtml(
+                    htmlAttributes: new { id = "SubGrid" },
+                    columns: subGrid.Columns(
+                            //subGrid.Column(header: "Tanggal", string.Format("{0:dd-MM-yyyy}", item.order.OrderDate)),
+                            subGrid.Column("Nama_pengeluaran", "Nama Pengeluaran"),
+                            subGrid.Column("Tanggal", "Tanggal"),
+                            subGrid.Column("Jumlah", "Jumlah"),
+                            subGrid.Column("Keterangan", "Keterangan")
+                            // subGrid.Column("Nama_cicilan", "Nama Nama_cicilan"),
+                            //subGrid.Column("Tgl_mulai", "Tgl_mulai"),
+                            //subGrid.Column("Tgl_bayar", "Tgl_bayar"),
+                            //subGrid.Column("Jmlh_bayar", "Jmlh_bayar")
+                        )
+                    );
+            })
+        )
+    )
+</div>
+<script>
+    $(document).ready(function () {
+        //gets the size of the tabl(colmns)
+        var size = $("#main #MainGrid > thead > tr >th").size();
+        //removes the last column to display sbgrid
+        $("#main #MainGrid > thead > tr >th").last().remove();
+        //adding new column for sbgrid header
+        $("#main #MainGrid > thead > tr").prepend("");
+        $("#main #MainGrid > tbody > tr").each(function (i, el) {
+            $(this).prepend(
+                    $("")
+                    .addClass("expand")
+                    .addClass("hoverEff")
+                    .attr('title', "click for show/hide")
+                );
+
+            //Now get sub table from last column and add this to the next new added row
+            var table = $("table", this).parent().html();
+            //add new row with this subtable
+            $(this).after("" + table + "");
+            $("table", this).parent().remove();
+            // click event that makes row collapsable
+            $(".hoverEff", this).live("click", function () {
+                $(this).parent().closest("tr").next().slideToggle(100);
+                $(this).toggleClass("expand collapse");
+            });
+        });
+        //subgrid is collapsed by default
+        $("#main #MainGrid > tbody > tr td.expand").each(function (i, el) {
+            $(this).toggleClass("expand collapse");
+            $(this).parent().closest("tr").next().slideToggle(100);
+        });
+    });
+</script>
+

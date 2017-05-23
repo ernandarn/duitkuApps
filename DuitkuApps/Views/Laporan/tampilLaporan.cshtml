@@ -49,9 +49,11 @@
               $.each(data1, function(index,value){
                   data.addRows([[value.Nama_penghasilan, value.Jumlah]]);
               });
-             
+
             var options = {
                 title: 'Laporan Penghasilan',
+                hAxis: { title: 'Nama Penghasilan', titleTextStyle: { color: '#1E4A08'} },
+                vAxis: { title: 'Nominal (Rp)', titleTextStyle: { color: '#1E4A08'} },
             };
 
             var chart = new google.charts.Bar(document.getElementById('chart_div'));

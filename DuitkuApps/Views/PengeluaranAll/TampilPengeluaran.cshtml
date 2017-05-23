@@ -38,6 +38,41 @@
 @Html.Raw(ViewBag.Pesan)
 
 
+@using (Html.BeginForm("Cari", "PengeluaranAll", FormMethod.Post, new { @class = "form-inline" }))
+{
+    <div>
+        <label for="dari">Dari</label>
+        <input type="text" id="dari" name="dari" />
+        <label for="ke">Ke</label>
+        <input type="text" id="ke" name="ke" />
+        <input type="submit" value="Cari" class="btn btn-primary btn-sm" />
+    </div>
+
+    <script>
+        $(function () {
+            $("#dari").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                dateFormat: "dd/MM/yy",
+                changeYear: true,
+                onSelect: function (selectedDate) {
+                    $("#ke").datepicker("option", "dari", selectedDate);
+                }
+            });
+
+            $("#ke").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                dateFormat: "dd/MM/yy",
+                changeYear: true,
+                onSelect: function (selectedDate) {
+                    $("#dari").datepicker("option", "ke", selectedDate);
+                }
+            });
+        });
+    </script>
+}
+<br />
 @Html.ActionLink("Tambah Detail Pengeluaran", "TambahDetail", "PengeluaranAll", new { @class = "btn btn-success" })
 <br /><br />
 <div class="container">

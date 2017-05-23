@@ -14,20 +14,28 @@ namespace DuitkuApps.Controllers
     {
         public ActionResult Index()
         {
-            if (Session["username"] == null)
-            {
-                if (User.Identity.IsAuthenticated)
-                {
-                    Session["username"] = User.Identity.Name;
-                }
-                else
-                {
-                    var tempUser = Guid.NewGuid().ToString();
-                    Session["username"] = tempUser;
-                }
-            }
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    var user = User.Identity;
+            //    ViewBag.Name = user.Name;
+            //    if (Session["username"] == null)
+            //    {
+            //        if (User.Identity.IsAuthenticated)
+            //        {
+            //            Session["username"] = User.Identity.Name;
+            //        }
+            //        else
+            //        {
+            //            var tempUser = Guid.NewGuid().ToString();
+            //            Session["username"] = tempUser;
+            //        }
+            //    }
+            //}
+         
             using (PenghasilanDAL tampil = new PenghasilanDAL())
-            { 
+            {
+                string username =
+                 Session["username"] != null ? Session["username"].ToString() : string.Empty;
                 var result = tampil.Tampil().ToList();
                 if (TempData["Pesan"] != null)
                 {
@@ -39,13 +47,36 @@ namespace DuitkuApps.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                using (PenghasilanDAL service = new PenghasilanDAL())
+                {
+                    string username = Session["username"] != null ? Session["username"].ToString() : string.Empty;
+                    return View(service.GetByUser(username));
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Penghasilan tmbh)
         {
+             if (Session["username"] == null)
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    Session["username"] = User.Identity.Name;
+                }
+                else
+                {
+                    var tempUser = Guid.NewGuid().ToString();
+                    Session["username"] = tempUser;
+                }
+            }
             using (PenghasilanDAL data = new PenghasilanDAL())
             {
                 try
@@ -118,13 +149,13 @@ namespace DuitkuApps.Controllers
         {
             using (PenghasilanDAL tgl = new PenghasilanDAL())
             {
-                if (!dari.HasValue) dari = DateTime.Now.Date;
-                if (!ke.HasValue) ke = dari.GetValueOrDefault(DateTime.Now.Date).Date.AddDays(1);
-                if (ke < dari) ke = dari.GetValueOrDefault(DateTime.Now.Date).Date.AddDays(1);
+                //if (!dari.HasValue) dari = DateTime.Now.Date;
+                //if (!ke.HasValue) ke = dari.GetValueOrDefault(DateTime.Now.Date).Date.AddDays(1);
+                //if (ke < dari) ke = dari.GetValueOrDefault(DateTime.Now.Date).Date.AddDays(1);
                 ViewBag.dari = dari;
                 ViewBag.ke = ke;
-                var results = tgl.Filter(dari, ke).ToList();
-                return View(results);
+                var results = tgl.CariTanggal(dari, ke).ToList();
+                return View("Index", results);
             }
         }
 

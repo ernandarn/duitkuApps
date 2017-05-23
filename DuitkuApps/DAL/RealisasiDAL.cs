@@ -87,6 +87,12 @@ namespace DuitkuApps.DAL
             }
         }
 
+        public IEnumerable<Realisasi> CariTanggal(DateTime? dari, DateTime? ke)
+        {
+            var cari = db.Realisasi.Where(c => c.Tanggal >= dari && c.Tanggal < ke).ToList();
+            return cari;
+        }
+
         public void Dispose()
         {
             db.Dispose();

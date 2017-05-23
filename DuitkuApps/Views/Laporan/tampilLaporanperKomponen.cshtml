@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "Laporan Per Komponen Pengeluaran";
+}
+
+<style>
+    th {
+        text-align: center;
+        background-color: red;
+        color: white;
+    }
+</style>
+<h2 style="text-align:center;font-weight:bold;font-family:'Harlow Solid';font-size:45px;color:red"><strong>@ViewBag.Title</strong> </h2>
+<hr />
+<br />
+
+<div class="container">
+    @*<div style="float: left; margin-left: 30px;">
+            <select id="ddlMonth">
+                <option value="1">Januari</option>
+                <option value="2">Februari</option>
+                <option value="3">Maret</option>
+                <option value="4">April</option>
+                <option value="5">Mei</option>
+                <option value="6">Juni</option>
+                <option value="7">Juli</option>
+                <option value="8">Agustus</option>
+            </select>
+            <select id="ddlYear">
+                <option>2013</option>
+                <option>2014</option>
+                <option>2015</option>
+            </select>
+            <input id="btn_line_chart" type="button" value="Show" />
+        </div>*@
+    <br />
+
+    <div id="chart_div" style="width: 500px; height: 500px;margin-left:250px">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', { 'packages': ['bar'] });
+          google.charts.setOnLoadCallback(drawChart);
+
+          function drawChart() {
+              var data = new google.visualization.DataTable();
+              data.addColumn('string', 'Nama Komponen');
+              data.addColumn('number', 'Anggaran');
+              //data.addColumn('number', 'Jumlah Cicilan');
+              data.addColumn('number', 'Realisasi');
+              var data1 = @Html.Raw(Json.Encode(ViewBag.Hasil));
+              $.each(data1, function(index,value){
+                  data.addRows([[value.Nama_komponen, value.Jumlah, value.Jumlah ]]);
+              });
+
+            var options = {
+                title: 'Laporan Per Komponen Pengeluaran',
+                hAxis: { title: 'Nama Komponen', titleTextStyle: { color: '#1E4A08'} },
+                vAxis: { title: 'Nominal (Rp)', titleTextStyle: { color: '#1E4A08'} },
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('chart_div'));
+
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+          }
+        </script>
+    </div>
+
+</div>
+
+

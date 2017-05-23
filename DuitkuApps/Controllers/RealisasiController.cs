@@ -114,5 +114,16 @@ namespace DuitkuApps.Controllers
             }
             return RedirectToAction("TampilRealisasi");
         }
+
+        public ActionResult Cari(DateTime? dari, DateTime? ke)
+        {
+            using (RealisasiDAL tgl = new RealisasiDAL())
+            {
+                ViewBag.dari = dari;
+                ViewBag.ke = ke;
+                var results = tgl.CariTanggal(dari, ke).ToList();
+                return View("TampilRealisasi", results);
+            }
+        }
     }
 }

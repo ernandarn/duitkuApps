@@ -152,6 +152,12 @@ namespace DuitkuApps.DAL
             }
         }
 
+        public IEnumerable<Pengeluaran> CariTanggal(DateTime? dari, DateTime? ke)
+        {
+            var cari = db.Pengeluaran.Where(c => c.Tanggal >= dari && c.Tanggal < ke).ToList();
+            return cari;
+        }
+
         //Cicilan
         public IQueryable<Cicilan> AmbilDataCicilan()
         {

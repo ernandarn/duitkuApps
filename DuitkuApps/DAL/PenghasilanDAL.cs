@@ -42,6 +42,15 @@ namespace DuitkuApps.DAL
             }
         }
 
+        public Penghasilan GetByUser(string username)
+        {
+            var result = (from s in db.Penghasilan
+                          where s.Username == username
+                          select s).FirstOrDefault();
+
+            return result;
+        }
+
         public void Tambah(Penghasilan obj)
         {
             try
@@ -105,22 +114,12 @@ namespace DuitkuApps.DAL
             }
         }
 
-        public IEnumerable<Penghasilan> Filter(DateTime? dari, DateTime? ke)
+        public IEnumerable<Penghasilan> CariTanggal(DateTime? dari, DateTime? ke)
         {
-            var cari = db.Penghasilan.Where(c => c.Tanggal >= dari && c.Tanggal <= ke).ToList();
+            var cari = db.Penghasilan.Where(c => c.Tanggal >= dari && c.Tanggal < ke).ToList();
             return cari;
-
         }
 
-
-
-        public IQueryable<Penghasilan> Cari(string txtSearch)
-        {
-            var result = from a in db.Penghasilan
-                         where a.Nama_penghasilan.ToLower().Contains(txtSearch.ToLower())
-                         select a;
-            return result;
-        }
 
         public void Dispose()
         {

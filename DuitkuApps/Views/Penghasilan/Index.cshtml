@@ -45,23 +45,40 @@
 @Html.Raw(ViewBag.Pesan)
 
 
-@*@Html.DropDownList("ExpiryYear", Enumerable.Range(DateTime.Now.Year, 10).Select(x => new SelectListItem { Text = x.ToString() }), "Expiry Year")
-@Html.DropDownList("ExpiryMonth", Enumerable.Range(1, 12).Select(x => new SelectListItem { Text = x.ToString() }), "Expiry Month")
-<input type="submit" value="Cari" class="btn btn-primary btn-sm" />*@
-
-@*@{
-    var dari = (DateTime)ViewBag.dari;
-    var ke = (DateTime)ViewBag.ke;
-}
-@using (Html.BeginForm("Cari", "Penghasilan", FormMethod.Get))
+@using (Html.BeginForm("Cari", "Penghasilan", FormMethod.Post, new { @class = "form-inline" }))
 {
     <div>
-        <div>Dari Tanggal: @Html.TextBox("", string.Format("{0:dd MMM yyy}", dari), new { @class = "DatePicker" })</div>
-        <div>Ke Tanggal: @Html.TextBox("", string.Format("{0:dd MMM yyy}", ke), new { @class = "DatePicker" })</div>
-        <input type="submit" value="Cari" />
+        <label for="dari">Dari</label>
+        <input type="text" id="dari" name="dari" />
+        <label for="ke">Ke</label>
+        <input type="text" id="ke" name="ke" />
+        <input type="submit" value="Cari" class="btn btn-primary btn-sm" />
     </div>
 
-}*@
+    <script>
+        $(function () {
+            $("#dari").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                dateFormat: "dd/MM/yy",
+                changeYear: true,
+                onSelect: function (selectedDate) {
+                    $("#ke").datepicker("option", "dari", selectedDate);
+                }
+            });
+
+            $("#ke").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                dateFormat: "dd/MM/yy",
+                changeYear: true,
+                onSelect: function (selectedDate) {
+                    $("#dari").datepicker("option", "ke", selectedDate);
+                }
+            });
+        });
+    </script>
+}
 <br />
 @Html.ActionLink("Tambah Penghasilan", "Create", "Penghasilan", new { @class = "btn btn-success" })
 <br /><br /><br />
